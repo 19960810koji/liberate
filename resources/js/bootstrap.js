@@ -8,5 +8,3 @@ window.axios.interceptors.request.use(config => {
     config.headers['X-XSRF-TOKEN'] = getCookieValue('XSRF-TOKEN')
     return config
 })
-
-アイウエオ
