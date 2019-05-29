@@ -1,15 +1,28 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-//ページコンポーネントをインポート
+import WordList from './pages/WordList.vue'
 import Login from './pages/Login.vue'
+
+import store from './store'
 
 Vue.use(VueRouter)
 
 const routes = [
 	{
+		path: '/',
+		component: WordList
+	},
+	{
 		path: '/login',
-		component: Login
+		component: Login,
+		beforeEnter(to, from, next) {
+			if (store.getters['auth/check']) {
+				next('/')
+			} else {
+				next()
+			}
+		}
 	}
 ]
 
