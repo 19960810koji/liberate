@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 
 import WordList from './pages/WordList.vue'
 import Login from './pages/Login.vue'
+import SystemError from './pages/errors/SystemError.vue'
+import NotFound from './pages/errors/NotFound.vue'
 
 import store from './store'
 
@@ -23,6 +25,14 @@ const routes = [
 				next()
 			}
 		}
+	},
+	{
+		path: '/SystemError',
+		component: SystemError
+	},
+	{
+		path: '*',
+		component: NotFound
 	}
 ]
 

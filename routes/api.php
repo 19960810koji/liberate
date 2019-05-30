@@ -9,3 +9,9 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/user', function () {
     return Auth::user();
 })->name('user');
+
+//トークンをリフレッシュ
+Route::get('/reflesh-token', function(Illuminate\Http\Request $request) {
+    $request->session()->regenerateToken();
+    return response()->json();
+});
