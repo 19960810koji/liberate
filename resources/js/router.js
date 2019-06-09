@@ -7,6 +7,7 @@ import SystemError from './pages/errors/SystemError.vue'
 import NotFound from './pages/errors/NotFound.vue'
 
 import store from './store'
+import DefinitionDetail from './pages/DefinitionDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -14,6 +15,11 @@ const routes = [
 	{
 		path: '/',
 		component: WordList
+	},
+	{
+	  path: '/definitions/:id',
+	  component: DefinitionDetail,
+	  props: true
 	},
 	{
 		path: '/login',
