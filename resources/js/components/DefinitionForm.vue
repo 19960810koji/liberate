@@ -66,8 +66,6 @@ export default {
       const formData = new FormData()
       formData.append('word_id', this.word_id)
       formData.append('definition', this.definition)
-      console.log(this.word_id)
-      console.log(this.definition)
       const response = await axios.post('api/definitions', formData)
 
       this.loading = false

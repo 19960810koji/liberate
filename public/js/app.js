@@ -1976,52 +1976,50 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 formData = new FormData();
                 formData.append('word_id', this.word_id);
                 formData.append('definition', this.definition);
-                console.log(this.word_id);
-                console.log(this.definition);
-                _context.next = 8;
+                _context.next = 6;
                 return axios.post('api/definitions', formData);
 
-              case 8:
+              case 6:
                 response = _context.sent;
                 this.loading = false;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["UNPROCESSABLE_ENTITY"])) {
-                  _context.next = 13;
+                  _context.next = 11;
                   break;
                 }
 
                 this.errors = response.data.errors;
                 return _context.abrupt("return", false);
 
-              case 13:
+              case 11:
                 this.reset();
                 this.$emit('input', false);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_2__["CREATED"])) {
-                  _context.next = 18;
+                  _context.next = 16;
                   break;
                 }
 
                 this.$store.commit('error/setCode', response.status);
                 return _context.abrupt("return", false);
 
-              case 18:
+              case 16:
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_2__["CREATED"])) {
-                  _context.next = 21;
+                  _context.next = 19;
                   break;
                 }
 
                 this.$store.commit('error/setCode', response.status);
                 return _context.abrupt("return", false);
 
-              case 21:
+              case 19:
                 this.$store.commit('message/setContent', {
                   content: '定義を投稿しました！',
                   timeout: 6000
                 });
                 this.$router.push("/definitions/".concat(response.data.id));
 
-              case 23:
+              case 21:
               case "end":
                 return _context.stop();
             }
