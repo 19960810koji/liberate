@@ -1938,11 +1938,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
+      words: [],
       loading: false,
       word_id: null,
       definition: null,
       errors: null
     };
+  },
+  created: function created() {
+    var _this = this;
+
+    var res = axios.get('api/words').then(function (res) {
+      _this.words = res.data;
+    });
   },
   props: {
     value: {
@@ -3798,15 +3806,16 @@ var render = function() {
             },
             [
               _c("option", { attrs: { value: "" } }, [
-                _vm._v("Please choose a word")
+                _vm._v("Please select a word")
               ]),
               _vm._v(" "),
-              _c("option", { attrs: { value: "1" } }, [_vm._v("幸せ")]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "2" } }, [_vm._v("お金")]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "3" } }, [_vm._v("人生")])
-            ]
+              _vm._l(_vm.words, function(word) {
+                return _c("option", { domProps: { value: word.id } }, [
+                  _vm._v("\n        " + _vm._s(word.word) + "\n      ")
+                ])
+              })
+            ],
+            2
           ),
           _vm._v(" "),
           _c("label", [_vm._v("Definition")]),

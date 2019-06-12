@@ -15,10 +15,10 @@
       </div>
       <label>word</label>
       <select v-model="word_id" class="form__item">
-        <option value="">Please choose a word</option>
-        <option value="1">幸せ</option>
-        <option value="2">お金</option>
-        <option value="3">人生</option>
+        <option value="">Please select a word</option>
+        <option v-for="word in words" v-bind:value="word.id">
+          {{ word.word }}
+        </option>
       </select>
       <label>Definition</label>
       <textarea v-model="definition" class="form__item" name="definition" rows="2" cols="75"></textarea>
@@ -39,11 +39,15 @@ export default {
   },
   data() {
     return {
+      words: [],
       loading: false,
       word_id: null,
       definition: null,
       errors: null
     }
+  },
+  created() {
+    const res = axios.get('api/words').then(res => { this.words = res.data })
   },
 	props: {
 		value: {
