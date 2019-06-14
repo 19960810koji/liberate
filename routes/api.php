@@ -13,14 +13,14 @@ Route::post('/definitions', 'UserPublic\DefinitionController@create')->name('def
 // 定義一覧
 Route::get('/definitions', 'UserPublic\DefinitionController@index')->name('definition.index');
 
-//単語一覧
+// 単語一覧
 Route::get('/words', 'UserPublic\WordController@index')->name('word.index');
 
 Route::get('/user', function () {
     return Auth::user();
 })->name('user');
 
-//トークンをリフレッシュ
+// トークンをリフレッシュ
 Route::get('/reflesh-token', function(Illuminate\Http\Request $request) {
     $request->session()->regenerateToken();
     return response()->json();
