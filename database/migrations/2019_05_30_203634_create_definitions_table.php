@@ -18,6 +18,9 @@ class CreateDefinitionsTable extends Migration
             $table->unsignedInteger('word_id');
             $table->string('definition');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('word_id')->references('id')->on('words');
         });
     }
 

@@ -18,10 +18,10 @@ class DefinitionController extends Controller {
     }
 
     public function index() {
-        // $definitions = Definition::with(['owner'])
-        //     ->orderBy(Definition::CREATED_AT, 'desc')->paginate();
-
-        // return $definitions;
+        $definitions = Definition::with(['contributor', 'word'])
+            ->orderBy(Definition::CREATED_AT, 'desc')->paginate();
+        
+        return $definitions;
     }
 
 
