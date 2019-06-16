@@ -18,14 +18,14 @@ class DefinitionController extends Controller {
     }
 
     public function index() {
-        $definitions = Definition::with(['contributor', 'word'])
+        $definitions = Definition::with(['contributor', 'word', 'likes'])
             ->orderBy(Definition::CREATED_AT, 'desc')->paginate();
         
         return $definitions;
     }
 
     public function detail(int $id) {
-        $definition = Definition::where('id', $id)->with(['contributor', 'word'])->first();
+        $definition = Definition::where('id', $id)->with(['contributor', 'word', 'likes'])->first();
         return $definition ?? abort(404);
     }
 
@@ -46,5 +46,24 @@ class DefinitionController extends Controller {
         }
 
         return response($definition, 201);
+    }
+
+    public function like(int $id) {
+        $definition = Definition::where('id', $id)->with('likes')->first();
+        if(!$definition) return abort(404);
+
+        $definition->likes()->detach(Auth::user()->id);
+        $definition->likes()->attach(Auth::user()->id);
+
+        return ['photo_id' => $id];
+    }
+
+    public function deleteLike(int $id) {
+        $definition = Definition::where('id', $id)->with('likes')->first();
+        if(!$definition) abort(404);
+
+        $definition->likes()->detach(Auth::user()->id);
+
+        return ['definition_id' => $id];
     }
 }
