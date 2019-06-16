@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 class DefinitionController extends Controller {
 
     public function __construct() {
-        $this->middleware('auth')->except(['index']);
+        $this->middleware('auth')->except(['index', 'detail']);
     }
 
     public function index() {
@@ -22,6 +22,11 @@ class DefinitionController extends Controller {
             ->orderBy(Definition::CREATED_AT, 'desc')->paginate();
         
         return $definitions;
+    }
+
+    public function detail(int $id) {
+        $definition = Definition::where('id', $id)->with(['contributor', 'word'])->first();
+        return $definition ?? abort(404);
     }
 
 
