@@ -12,6 +12,8 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::post('/definitions', 'UserPublic\DefinitionController@create')->name('definition.create');
 // 定義一覧
 Route::get('/definitions', 'UserPublic\DefinitionController@index')->name('definition.index');
+// 定義詳細
+Route::get('/definitions/{id}', 'UserPublic\DefinitionController@detail')->name('definition.detail');
 
 // 単語一覧
 Route::get('/words', 'UserPublic\WordController@index')->name('word.index');
