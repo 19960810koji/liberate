@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import WordList from './pages/WordList.vue'
+import DefinitionList from './pages/DefinitionList.vue'
 import Login from './pages/Login.vue'
 import SystemError from './pages/errors/SystemError.vue'
 import NotFound from './pages/errors/NotFound.vue'
@@ -14,7 +14,11 @@ Vue.use(VueRouter)
 const routes = [
 	{
 		path: '/',
-		component: WordList
+		component: DefinitionList,
+		props: route => {
+			const page = route.query.page
+			return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 }
+		}
 	},
 	{
 	  path: '/definitions/:id',
@@ -44,6 +48,9 @@ const routes = [
 
 const router = new VueRouter({
 	mode: 'history',
+	scrollBehavior() {
+		return { x: 0, y: 0 }
+	},
 	routes
 })
 

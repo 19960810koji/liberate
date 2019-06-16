@@ -8,8 +8,10 @@ class Definition extends Model {
 
     protected $keyType = 'int';
 
+    protected $perPage = 15;
+
     protected $visible = [
-        'id', 'definition', 'contributor'
+        'id', 'definition', 'contributor', 'word'
     ];
 
     public function contributor() {
