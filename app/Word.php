@@ -8,4 +8,8 @@ class Word extends Model {
     protected $visible = [
         'word',
     ];
+
+    public function definitions() {
+        return $this->hasMany('App\Definition');
+    }
 }

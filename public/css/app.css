@@ -530,3 +530,9 @@ img {
   padding: 1rem;
 }
 
+p.definition-sentence{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
