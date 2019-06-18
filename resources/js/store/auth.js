@@ -41,7 +41,6 @@ const actions = {
 
     context.commit('setApiStatus', false)
     if (response.status === UNPROCESSABLE_ENTITY) {
-      console.log(response.data.errors)
       context.commit('setRegisterErrorMessages', response.data.errors)
     } else {
       context.commit('error/setCode', response.status, { root: true })
