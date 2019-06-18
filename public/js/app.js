@@ -1917,11 +1917,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     item: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    like: function like() {
+      this.$emit('like', {
+        id: this.item.id,
+        liked: this.item.liked_by_user
+      });
     }
   }
 });
@@ -2337,6 +2347,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2349,6 +2364,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       definition: ''
     };
+  },
+  computed: {
+    isLogin: function isLogin() {
+      return this.$store.getters['auth/check'];
+    }
   },
   methods: {
     fetchDefinition: function () {
@@ -2390,6 +2410,100 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return fetchDefinition;
+    }(),
+    onLikeClick: function onLikeClick() {
+      if (!this.isLogin) {
+        alert('ログインしてください。');
+        return false;
+      }
+
+      if (this.definition.liked_by_user) {
+        this.unlike();
+      } else {
+        this.like();
+      }
+    },
+    like: function () {
+      var _like = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.put("/api/definitions/".concat(this.id, "/like"));
+
+              case 2:
+                response = _context2.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context2.next = 6;
+                  break;
+                }
+
+                this.$store.commit('error/setCode', response.status);
+                return _context2.abrupt("return", false);
+
+              case 6:
+                this.$set(this.definition, 'likes_count', this.definition.likes_count + 1);
+                this.$set(this.definition, 'liked_by_user', true);
+
+              case 8:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function like() {
+        return _like.apply(this, arguments);
+      }
+
+      return like;
+    }(),
+    unlike: function () {
+      var _unlike = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios["delete"]("/api/definitions/".concat(this.id, "/like"));
+
+              case 2:
+                response = _context3.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context3.next = 6;
+                  break;
+                }
+
+                this.$store.commit('error/setCode', response.status);
+                return _context3.abrupt("return", false);
+
+              case 6:
+                this.$set(this.definition, 'likes_count', this.definition.likes_count - 1);
+                this.$set(this.definition, 'liked_by_user', false);
+
+              case 8:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function unlike() {
+        return _unlike.apply(this, arguments);
+      }
+
+      return unlike;
     }()
   },
   watch: {
@@ -2397,20 +2511,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       handler: function () {
         var _handler = _asyncToGenerator(
         /*#__PURE__*/
-        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
             while (1) {
-              switch (_context2.prev = _context2.next) {
+              switch (_context4.prev = _context4.next) {
                 case 0:
-                  _context2.next = 2;
+                  _context4.next = 2;
                   return this.fetchDefinition();
 
                 case 2:
                 case "end":
-                  return _context2.stop();
+                  return _context4.stop();
               }
             }
-          }, _callee2, this);
+          }, _callee4, this);
         }));
 
         function handler() {
@@ -2460,6 +2574,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
@@ -2492,27 +2607,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log("/api/definitions/?page=".concat(this.page));
-                _context.next = 3;
+                _context.next = 2;
                 return axios.get("/api/definitions/?page=".concat(this.page));
 
-              case 3:
+              case 2:
                 response = _context.sent;
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context.next = 7;
+                  _context.next = 6;
                   break;
                 }
 
                 this.$store.commit('error/setCode', response.status);
                 return _context.abrupt("return", false);
 
-              case 7:
+              case 6:
                 this.definitions = response.data.data;
                 this.currentPage = response.data.current_page;
                 this.lastPage = response.data.last_page;
 
-              case 10:
+              case 9:
               case "end":
                 return _context.stop();
             }
@@ -2525,6 +2639,115 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return fetchDefinitions;
+    }(),
+    onLikeClick: function onLikeClick(_ref) {
+      var id = _ref.id,
+          liked = _ref.liked;
+
+      if (!this.$store.getters['auth/check']) {
+        alert('ログインしてください');
+        return false;
+      }
+
+      if (liked) {
+        this.unlike(id);
+      } else {
+        this.like(id);
+      }
+    },
+    like: function () {
+      var _like = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(id) {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.put("/api/definitions/".concat(id, "/like"));
+
+              case 2:
+                response = _context2.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context2.next = 6;
+                  break;
+                }
+
+                this.$store.commit('error/setCode', response.status);
+                return _context2.abrupt("return", false);
+
+              case 6:
+                this.definitions = this.definitions.map(function (definition) {
+                  if (definition.id === response.data.definition_id) {
+                    definition.likes_count += 1;
+                    definition.liked_by_user = true;
+                  }
+
+                  return definition;
+                });
+
+              case 7:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function like(_x) {
+        return _like.apply(this, arguments);
+      }
+
+      return like;
+    }(),
+    unlike: function () {
+      var _unlike = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(id) {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios["delete"]("/api/definitions/".concat(id, "/like"));
+
+              case 2:
+                response = _context3.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context3.next = 6;
+                  break;
+                }
+
+                this.$store.commit('error/setCode', response.status);
+                return _context3.abrupt("return", false);
+
+              case 6:
+                this.definitions = this.definitions.map(function (definition) {
+                  if (definition.id === response.data.definition_id) {
+                    definition.likes_count -= 1;
+                    definition.liked_by_user = false;
+                  }
+
+                  return definition;
+                });
+
+              case 7:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function unlike(_x2) {
+        return _unlike.apply(this, arguments);
+      }
+
+      return unlike;
     }()
   },
   watch: {
@@ -2532,20 +2755,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       handler: function () {
         var _handler = _asyncToGenerator(
         /*#__PURE__*/
-        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
             while (1) {
-              switch (_context2.prev = _context2.next) {
+              switch (_context4.prev = _context4.next) {
                 case 0:
-                  _context2.next = 2;
+                  _context4.next = 2;
                   return this.fetchDefinitions();
 
                 case 2:
                 case "end":
-                  return _context2.stop();
+                  return _context4.stop();
               }
             }
-          }, _callee2, this);
+          }, _callee4, this);
         }));
 
         function handler() {
@@ -26092,11 +26315,18 @@ var render = function() {
               "button",
               {
                 staticClass: "photo__action photo__action--like",
-                attrs: { title: "Like photo" }
+                class: { "photo__action--liked": _vm.item.liked_by_user },
+                attrs: { title: "Like definition" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.like($event)
+                  }
+                }
               },
               [
                 _c("i", { staticClass: "icon ion-md-heart" }),
-                _vm._v("12\n\t\t\t\t\t")
+                _vm._v(_vm._s(_vm.item.likes_count) + "\n\t\t\t\t\t")
               ]
             )
           ])
@@ -26593,7 +26823,23 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _vm._m(0)
+          _c("div", { staticClass: "photo-detail__pane" }, [
+            _c(
+              "button",
+              {
+                staticClass: "button button--like",
+                class: { "button--liked": _vm.definition.liked_by_user },
+                attrs: { title: "Like definition" },
+                on: { click: _vm.onLikeClick }
+              },
+              [
+                _c("i", { staticClass: "icon ion-md-heart" }),
+                _vm._v(_vm._s(_vm.definition.likes_count) + "\n    ")
+              ]
+            ),
+            _vm._v(" "),
+            _vm._m(0)
+          ])
         ],
         1
       )
@@ -26604,17 +26850,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "photo-detail__pane" }, [
-      _c(
-        "button",
-        { staticClass: "button button--like", attrs: { title: "Like photo" } },
-        [_c("i", { staticClass: "icon ion-md-heart" }), _vm._v("12\n    ")]
-      ),
-      _vm._v(" "),
-      _c("h2", { staticClass: "photo-detail__title" }, [
-        _c("i", { staticClass: "icon ion-md-chatboxes" }),
-        _vm._v("Comments\n    ")
-      ])
+    return _c("h2", { staticClass: "photo-detail__title" }, [
+      _c("i", { staticClass: "icon ion-md-chatboxes" }),
+      _vm._v("Comments\n    ")
     ])
   }
 ]
@@ -26650,7 +26888,8 @@ var render = function() {
           return _c("Definition", {
             key: definition.id,
             staticClass: "grid__item",
-            attrs: { item: definition }
+            attrs: { item: definition },
+            on: { like: _vm.onLikeClick }
           })
         }),
         1
@@ -44593,15 +44832,14 @@ window.axios.interceptors.response.use(function (response) {
 /*!************************************************!*\
   !*** ./resources/js/components/Definition.vue ***!
   \************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Definition_vue_vue_type_template_id_5242007e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Definition.vue?vue&type=template&id=5242007e& */ "./resources/js/components/Definition.vue?vue&type=template&id=5242007e&");
 /* harmony import */ var _Definition_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Definition.vue?vue&type=script&lang=js& */ "./resources/js/components/Definition.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Definition_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Definition_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -44631,7 +44869,7 @@ component.options.__file = "resources/js/components/Definition.vue"
 /*!*************************************************************************!*\
   !*** ./resources/js/components/Definition.vue?vue&type=script&lang=js& ***!
   \*************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44992,15 +45230,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!************************************************!*\
   !*** ./resources/js/components/Pagination.vue ***!
   \************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Pagination_vue_vue_type_template_id_d7acf176___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Pagination.vue?vue&type=template&id=d7acf176& */ "./resources/js/components/Pagination.vue?vue&type=template&id=d7acf176&");
 /* harmony import */ var _Pagination_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Pagination.vue?vue&type=script&lang=js& */ "./resources/js/components/Pagination.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Pagination_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Pagination_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -45030,7 +45267,7 @@ component.options.__file = "resources/js/components/Pagination.vue"
 /*!*************************************************************************!*\
   !*** ./resources/js/components/Pagination.vue?vue&type=script&lang=js& ***!
   \*************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -45520,7 +45757,6 @@ var actions = {
               context.commit('setApiStatus', false);
 
               if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"]) {
-                console.log(response.data.errors);
                 context.commit('setRegisterErrorMessages', response.data.errors);
               } else {
                 context.commit('error/setCode', response.status, {

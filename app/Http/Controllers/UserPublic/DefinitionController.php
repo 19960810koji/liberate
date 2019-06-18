@@ -55,7 +55,7 @@ class DefinitionController extends Controller {
         $definition->likes()->detach(Auth::user()->id);
         $definition->likes()->attach(Auth::user()->id);
 
-        return ['photo_id' => $id];
+        return ['definition_id' => $id];
     }
 
     public function deleteLike(int $id) {
