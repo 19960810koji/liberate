@@ -16,9 +16,8 @@ class Definition extends Model {
         'likes_count', 'liked_by_user'
     ];
 
-
     protected $visible = [
-        'id', 'definition', 'contributor', 'word', 'likes_count', 'liked_by_user'
+        'id', 'definition', 'contributor', 'word', 'likes_count', 'liked_by_user', 'comments'
     ];
 
     public function getLikesCountAttribute() {
@@ -43,5 +42,9 @@ class Definition extends Model {
 
     public function likes() {
         return $this->belongsToMany('App\User', 'likes')->withTimestamps();
+    }
+
+    public function comments() {
+        return $this->hasMany('App\Comment')->orderBy('id', 'desc');
     }
 }

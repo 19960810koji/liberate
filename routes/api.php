@@ -14,10 +14,12 @@ Route::post('/definitions', 'UserPublic\DefinitionController@create')->name('def
 Route::get('/definitions', 'UserPublic\DefinitionController@index')->name('definition.index');
 // 定義詳細
 Route::get('/definitions/{id}', 'UserPublic\DefinitionController@detail')->name('definition.detail');
-// いいね
+// いいね投稿
 Route::put('/definitions/{id}/like', 'UserPublic\DefinitionController@like')->name('definition.like');
 // いいね解除
 Route::delete('/definitions/{id}/like', 'UserPublic\DefinitionController@deleteLike');
+// コメント投稿
+Route::post('/definitions/{id}/comment', 'UserPublic\DefinitionController@comment')->name('definition.comment');
 
 // 単語一覧
 Route::get('/words', 'UserPublic\WordController@index')->name('word.index');
