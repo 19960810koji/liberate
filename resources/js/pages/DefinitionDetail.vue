@@ -17,12 +17,38 @@
       <h2 class="photo-detail__title">
         <i class="icon ion-md-chatboxes"></i>Comments
       </h2>
+      <ul v-if="definition.comments.length > 0" class="photo-detail__comments">
+        <li
+          v-for="comment in definition.comments"
+          :key="comment.content"
+          class="photo-detail__commentItem"
+        >
+          <p class="photo-detail__commentBody">
+            {{ comment.content }}
+          </p>
+          <p class="photo-detail__commentInfo">
+            {{ comment.author.name }}
+          </p>
+        </li>
+      </ul>
+      <p v-else>No comments yet.</p>
+      <form v-if="isLogin" @submit.prevent="addComment" class="form">
+        <div v-if="commentErrors" class="errors">
+        <ul v-if="commentErrors.content">
+          <li v-for="msg in commentErrors.content" :key="msg">{{ msg }}</li>
+        </ul>
+        </div>
+        <textarea class="form__item" v-model="commentContent"></textarea>
+        <div class="form__button">
+          <button type="submit" class="button button--inverse">submit comment</button>
+        </div>
+      </form>
     </div>
   </div>
 </template>
 
 <script>
-import { OK } from '../util'
+import { OK, CREATED, UNPROCESSABLE_ENTITY } from '../util'
 
 export default {
   props: {
@@ -33,7 +59,9 @@ export default {
   },
   data () {
     return {
-      definition: ''
+      definition: '',
+      commentContent: '',
+      commentErrors: null
     }
   },
   computed: {
@@ -42,6 +70,7 @@ export default {
     }
   },
   methods: {
+    // 定義詳細を取得
     async fetchDefinition() {
       const response = await axios.get(`/api/definitions/${this.id}`)
 
@@ -52,6 +81,31 @@ export default {
       
       this.definition = response.data
     },
+    // コメント投稿
+    async addComment () {
+      const response = await axios.post(`/api/definitions/${this.id}/comment`, {
+        content: this.commentContent
+      }) 
+
+      if (response.status === UNPROCESSABLE_ENTITY) {
+        this.commentErrors = response.data.commentErrors
+        return false
+      }
+
+      this.commentContent = ''
+      this.commentErrors = null
+      
+      if (response.status !== CREATED) {
+        this.$store.commit('error/setCode'. response.status)
+        return false
+      }
+
+      this.$set(this.definition, 'comments', [
+        response.data,
+        ...this.definition.comments
+      ])
+    },
+    // いいね済みか判定
     onLikeClick () {
       if (! this.isLogin) {
         alert('ログインしてください。')
@@ -64,6 +118,7 @@ export default {
         this.like()
       }
     },
+    // いいね追加
     async like () {
       const response = await axios.put(`/api/definitions/${this.id}/like`)
 
@@ -75,6 +130,7 @@ export default {
       this.$set(this.definition, 'likes_count', this.definition.likes_count + 1)
       this.$set(this.definition, 'liked_by_user', true)
     },
+    // いいね削除
     async unlike () {
       const response = await axios.delete(`/api/definitions/${this.id}/like`)
 
