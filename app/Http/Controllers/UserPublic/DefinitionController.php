@@ -105,7 +105,10 @@ class DefinitionController extends Controller {
      * @param StoreComment $request
      * @return void
      */
-    public function comment(int $id, Definition $definition, StoreComment $request) {
+    public function comment(int $id, StoreComment $request) {
+        $definition = Definition::where('id', $id)->with('comments')->first();
+        if (!$definition) abort(404);
+
         DB::beginTransaction();
         try {
             $comment = new Comment();
@@ -113,6 +116,8 @@ class DefinitionController extends Controller {
             $comment->user_id = Auth::user()->id;
             $definition->comments()->save($comment);
         } catch(\Exception $e) {
+            var_dump($e->getMessage());
+            exit;
             DB::rollback();
             throw new InternalErrorException();
         }
