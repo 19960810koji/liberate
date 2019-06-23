@@ -20,6 +20,8 @@ Route::put('/definitions/{id}/like', 'UserPublic\DefinitionController@like')->na
 Route::delete('/definitions/{id}/like', 'UserPublic\DefinitionController@deleteLike');
 // コメント投稿
 Route::post('/definitions/{id}/comment', 'UserPublic\DefinitionController@comment')->name('definition.comment');
+// ユーザー詳細
+Route::get('/user/{id}', 'UserPublic\UserController@index')->name('user.index');
 
 // 単語一覧
 Route::get('/words', 'UserPublic\WordController@index')->name('word.index');
